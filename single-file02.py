@@ -36,7 +36,7 @@ class Color():
 
         self.bg     = self.BLACK
         self.player = self.WHITE
-        self.bullet = self.WHITE
+        self.bullet = self.RED
         self.star   = self.GRAY
 
 color   = Color()
@@ -59,7 +59,7 @@ my_screen    = MyScreen()
 class Player():
     def __init__(self):
         self.pos    = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
-        self.size   = (30,  30)
+        self.size   = (16,  16)
         self.limit  = [0, (my_screen.WIDTH - self.size[0]), 0, my_screen.HEIGHT] #should be a two layer: ((x min, x max), (y min, y max))
         self.speed  = (5,   0)
         self.box    = Rect(self.pos, self.size)
@@ -93,10 +93,11 @@ player      = Player()
 
 class PlayerAmmo(object):
     def __init__(self):
-        self.pos    = [(player.pos[0] + (player.size[0]/2)), (player.pos[1] - player.size[0] - 1)]
+        self.size   = [3,3]
+        self.pos    = [(  player.pos[0] + ( (player.size[0]/2) - (self.size[0]/2) )  ), (player.pos[1] - player.size[0] - 1)]
         self.speed  = 2
         self.damage = 1
-        self.size   = [5,5]
+
 
     def draw(self):
         draw.rect(my_screen.screen, color.bullet, Rect(self.pos, self.size))
