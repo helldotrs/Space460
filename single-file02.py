@@ -33,10 +33,11 @@ class Color():
         self.BLACK  =(0,    0,      0   )
         self.RED    =(230,  0,      100 )            #looks dope, must use if game uses colors in future.
         self.GRAY   =(153,  153,    153 )
+        self.GREEN  =(0,    204,    0   )
 
         self.bg     = self.BLACK
         self.player = self.WHITE
-        self.bullet = self.RED
+        self.bullet = self.GREEN
         self.star   = self.GRAY
         self.enemy  = self.RED
 
@@ -120,7 +121,7 @@ class BgStar(object):
 
     def draw(self):
         draw.rect(my_screen.screen, color.star, Rect(self.pos, self.size))
-        print("draw star")
+
 
 bg_star     = BgStar()                          #FIXME lazy temp for passing values to Star
 
@@ -134,7 +135,7 @@ class Enemy(object):
 
     def draw(self):
         draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
-        print("draw enemy") #FIXME now prints but does not draw.
+
 
 enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
 
@@ -144,6 +145,7 @@ stars       = []
 bullets     = []
 bullet_clock= 99999
 star_clock  = 99999
+star_spawn_rate = 10
 enemy_clock = 99999
 enemy_spawn_rate = 20
 bullet_fire_rate = 10
@@ -171,7 +173,7 @@ while running:
 
     #/add speed/destroy
     if True:
-        if len(stars) < 1000 and star_clock > bullet_fire_rate: #max 999 bullets,
+        if len(stars) < 1000 and star_clock > star_spawn_rate: #max 999 bullets,
             star_clock = 0
             stars.append(BgStar())
     star_clock += 1
@@ -192,6 +194,10 @@ while running:
         if len(enemies_list) < 1000:
             enemy_clock = 0
             enemies_list.append(Enemy())
+
+    for x in enemies_list:
+        if x.pos[1] < my_screen.HEIGHT: #FIXME make function/method
+            x.pos[1] += x.speed
 
     enemy_clock += 1
 
