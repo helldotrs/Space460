@@ -13,6 +13,7 @@ import random
 pygame.init()
 
 """
+to be implimented:
 art:
     ship:
         /\
@@ -30,7 +31,7 @@ class Color():
     def __init__(self):
         self.WHITE  =(255,  255,    255 )
         self.BLACK  =(0,    0,      0   )
-        self.RED    =(230,0,100)
+        self.RED    =(230,0,100)            #looks dope, must use if game uses colors in future.
         self.GRAY   =(153, 153, 153)
 
         self.bg     = self.BLACK
@@ -72,6 +73,9 @@ class Player():
         keys    = key.get_pressed()
         if(keys[K_UP]):
             print("up")
+        if(keys[K_DOWN]):
+            print("down")
+
         if  keys[K_LEFT]    and self.pos[0] >= self.limit[0]:
             self.pos[0] -= self.speed[0]
             print("left")
@@ -79,21 +83,13 @@ class Player():
             self.pos[0] += self.speed[0]
             print("right")
 
-
         #Y movement can be added at later stage
-
-
-    def toggleAutoFire(self): #not currently in use
-        if keys[K_y]:
-                self.auto_fire = True
-                print("on")
-        elif keys[K_n]:
-                self.auto_fire = False
-                print("off")
 
     def draw(self):
         draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
+
 player      = Player()
+
 
 class PlayerAmmo(object):
     def __init__(self):
@@ -104,33 +100,24 @@ class PlayerAmmo(object):
 
     def draw(self):
         draw.rect(my_screen.screen, color.bullet, Rect(self.pos, self.size))
-player_ammo = PlayerAmmo() #FIXME lazy temp for passing values to Star
+
+player_ammo = PlayerAmmo()                  #FIXME lazy temp for passing values to Star
+
 
 class BgStar(object):
     def __init__(self):
-        self.size   = [5,5]
-        #self.pos    = (random.randint(0, my_screen.WIDTH), self.size[1])
-        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-10]
-        self.speed  = 2
+        self.size_x = random.randint(1,5)   #FIX ME: wonky property name
+        self.size   = [self.size_x,self.size_x]
+        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.speed  = round(random.uniform(0.5, 3), 3)
         self.damage = 1
 
-
     def draw(self):
-        draw.rect(my_screen.screen, color.RED, Rect(self.pos, self.size))
-bg_star = BgStar() #FIXME lazy temp for passing values to Star
-"""
-class BgStar(object):
-    def __init__(self):
-        self.size   = [5,5]
-        self.pos    = [random.randint(0, my_screen.WIDTH), self.size]
-        self.speed  = 2
-        self.damage = 1
+        draw.rect(my_screen.screen, color.star, Rect(self.pos, self.size))
+
+bg_star = BgStar()                          #FIXME lazy temp for passing values to Star
 
 
-    def draw(self):
-        draw.rect(my_screen.screen, color.bullet, Rect(self.pos, self.size))
-bg_star     = BgStar()
-"""
 enemies     = []
 stars       = []
 bullets     = []
