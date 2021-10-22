@@ -31,13 +31,14 @@ class Color():
     def __init__(self):
         self.WHITE  =(255,  255,    255 )
         self.BLACK  =(0,    0,      0   )
-        self.RED    =(230,0,100)            #looks dope, must use if game uses colors in future.
-        self.GRAY   =(153, 153, 153)
+        self.RED    =(230,  0,      100 )            #looks dope, must use if game uses colors in future.
+        self.GRAY   =(153,  153,    153 )
 
         self.bg     = self.BLACK
         self.player = self.WHITE
         self.bullet = self.RED
         self.star   = self.GRAY
+        self.enemy  = self.RED
 
 color   = Color()
 
@@ -60,10 +61,10 @@ class Player():
     def __init__(self):
         self.pos    = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
         self.size   = (16,  16)
-        self.limit  = [0, (my_screen.WIDTH - self.size[0]), 0, my_screen.HEIGHT] #should be a two layer: ((x min, x max), (y min, y max))
-        self.speed  = (5,   0)
+        self.limit  = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
+        self.speed  = (5,   0)                                                                           #no y movement
         self.box    = Rect(self.pos, self.size)
-        self.keys   = key.get_pressed() #this way does not work and I dont know why
+        self.keys   = key.get_pressed()     #this way does not work and I dont know why
         self.auto_fire  = False
         self.kills  = 0
         self.points = 0
@@ -71,10 +72,7 @@ class Player():
     #movement and shooting
     def move(self):
         keys    = key.get_pressed()
-        if(keys[K_UP]):
-            print("up")
-        if(keys[K_DOWN]):
-            print("down")
+
 
         if  keys[K_LEFT]    and self.pos[0] >= self.limit[0]:
             self.pos[0] -= self.speed[0]
@@ -83,7 +81,14 @@ class Player():
             self.pos[0] += self.speed[0]
             print("right")
 
-        #Y movement can be added at later stage
+        if(keys[K_UP])      and self.pos[1] >= self.limit[2]:
+            self.pos[1] -= self.speed[1]
+            print("up")
+        if(keys[K_DOWN])    and self.pos[1] <= self.limit[3]:
+            self.pos[1] += self.speed[1]
+            print("down")
+
+        #y movement removed in self.speed[1]
 
     def draw(self):
         draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
@@ -115,15 +120,32 @@ class BgStar(object):
 
     def draw(self):
         draw.rect(my_screen.screen, color.star, Rect(self.pos, self.size))
+        print("draw star")
 
-bg_star = BgStar()                          #FIXME lazy temp for passing values to Star
+bg_star     = BgStar()                          #FIXME lazy temp for passing values to Star
+
+class Enemy(object):
+    def __init__(self):
+        self.size_x = random.randint(10,12)   #FIX ME: wonky property name
+        self.size   = [self.size_x,self.size_x]
+        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.speed  = round(random.uniform(0.5, 3), 3)
+        self.damage = 1
+
+    def draw(self):
+        draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
+        print("draw enemy") #FIXME now prints but does not draw.
+
+enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
 
 
-enemies     = []
+enemies_list= []
 stars       = []
 bullets     = []
 bullet_clock= 99999
 star_clock  = 99999
+enemy_clock = 99999
+enemy_spawn_rate = 20
 bullet_fire_rate = 10
 running     = True
 FONT        = font.SysFont("Verdana", 20) #pygame.
@@ -165,6 +187,19 @@ while running:
     for x in stars:
         x.draw()
     #/background
+    #enemies
+    if enemy_clock > enemy_spawn_rate:
+        if len(enemies_list) < 1000:
+            enemy_clock = 0
+            enemies_list.append(Enemy())
+
+    enemy_clock += 1
+
+    #draw enemy
+    for x in enemies_list:
+        x.draw()
+
+    #/enemies
 
 
 
