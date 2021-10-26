@@ -133,6 +133,7 @@ class Enemy(object):
         self.speed  = round(random.uniform(0.5, 3), 3)
         self.damage = 1
 
+
     def draw(self):
         draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
 
@@ -171,6 +172,8 @@ while running:
     #background
     my_screen.makeBackground() #before drawing anything else
 
+
+
     #/add speed/destroy
     if True:
         if len(stars) < 1000 and star_clock > star_spawn_rate: #max 999 bullets,
@@ -207,9 +210,6 @@ while running:
 
     #/enemies
 
-
-
-
     player.move()
 
     #player.draw()
@@ -233,12 +233,30 @@ while running:
     for bullet in bullets: #delete
         bullet.draw()
     #/gun
+    #collision
+    #collide = pygame.Rect.colliderect(player_rect, player_rect2)
+    for enemy in enemies_list:
+        col1    = Rect(player.pos,  player.size)
+        col2    = Rect(enemy.pos,   enemy.size)
+        if pygame.Rect.colliderect(col1, col2):
+            print("player death")
+
+        for bullet in bullets:
+            col1    = Rect(bullet.pos,  bullet.size)
+            col2    = Rect(enemy.pos,   enemy.size)
+            if pygame.Rect.colliderect(col1, col2):
+                print("enemy death")
+    #/collision
 
     for drawable in drawn_objects:
         drawable.draw()
     #if(player.auto_fire):
     #    player_ammo.shoot()
     #    player_ammo.pos[1]  -= player_ammo.speed
+
+
+
+    ################################################################
 
 
     display.flip()
