@@ -77,10 +77,10 @@ class Player():
 
         if  keys[K_LEFT]    and self.pos[0] >= self.limit[0]:
             self.pos[0] -= self.speed[0]
-            print("left")
+            #print("left")
         if  keys[K_RIGHT]   and self.pos[0] <= self.limit[1]:
             self.pos[0] += self.speed[0]
-            print("right")
+            #print("right")
 
         if(keys[K_UP])      and self.pos[1] >= self.limit[2]:
             self.pos[1] -= self.speed[1]
@@ -141,18 +141,19 @@ class Enemy(object):
 enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
 
 
-enemies_list= []
-stars       = []
-bullets     = []
-bullet_clock= 99999
-star_clock  = 99999
-star_spawn_rate = 10
-enemy_clock = 99999
-enemy_spawn_rate = 20
-bullet_fire_rate = 10
-running     = True
-FONT        = font.SysFont("Verdana", 20) #pygame.
-my_clock    = time.Clock()
+enemies_list        = []
+stars               = []
+bullets             = []
+bullet_clock        = 99999
+star_clock          = 99999
+star_spawn_rate     = 10
+enemy_clock         = 99999
+enemy_spawn_rate    = 20
+bullet_fire_rate    = 10
+running             = True
+FONT                = font.SysFont("Verdana", 20) #pygame.
+my_clock            = time.Clock()
+game_over           = False
 
 drawn_objects = [player]
 
