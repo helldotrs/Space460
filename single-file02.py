@@ -40,18 +40,24 @@ class Color():
         self.bullet = self.GREEN
         self.star   = self.GRAY
         self.enemy  = self.RED
+        self.TEXT   = self.RED
 
 color   = Color()
 
 class MyScreen():
     def __init__(self):
-        self.WIDTH     = 500
-        self.HEIGHT    = 500
-        self.SIZE      = [self.WIDTH, self.HEIGHT]
-        self.CENTER_X  = self.WIDTH/2
-        self.CENTER_Y  = self.HEIGHT/2
-        self.CENTER    = (self.WIDTH/2, self.HEIGHT/2)
-        self.screen    = display.set_mode((self.WIDTH, self.HEIGHT))
+        self.WIDTH      = 500
+        self.HEIGHT     = 500
+        self.SIZE       = [self.WIDTH, self.HEIGHT]
+        self.CENTER_X   = self.WIDTH/2
+        self.CENTER_Y   = self.HEIGHT/2
+        self.CENTER     = (self.WIDTH/2, self.HEIGHT/2)
+        self.screen     = display.set_mode((self.WIDTH, self.HEIGHT))
+
+        self.FONT_POS   = (10, 10)
+        self.FONT_SIZE  = 16
+        self.FONT_TYPE  = "Verdana"
+        self.font_out   = pygame.font.SysFont(self.FONT_TYPE, self.FONT_SIZE) #pygame.
 
     def makeBackground(self):
         self.screen.fill(color.bg)
@@ -69,6 +75,7 @@ class Player():
         self.auto_fire  = False
         self.kills  = 0
         self.points = 0
+        self.lives  = 3 #for future updates
 
     #movement and shooting
     def move(self):
@@ -149,9 +156,9 @@ star_clock          = 99999
 star_spawn_rate     = 10
 enemy_clock         = 99999
 enemy_spawn_rate    = 20
-bullet_fire_rate    = 10
+bullet_fire_rate    = 7 #lower number higher rate
 running             = True
-FONT                = font.SysFont("Verdana", 20) #pygame.
+
 my_clock            = time.Clock()
 game_over           = False
 
@@ -241,16 +248,46 @@ while running:
         col2    = Rect(enemy.pos,   enemy.size)
         if pygame.Rect.colliderect(col1, col2):
             print("player death")
+            game_over   = True
+
+
+
 
         for bullet in bullets:
             col1    = Rect(bullet.pos,  bullet.size)
             col2    = Rect(enemy.pos,   enemy.size)
             if pygame.Rect.colliderect(col1, col2):
                 print("enemy death")
+                player.points   += 1
+                enemies_list.remove(enemy)
+                bullets.remove(bullet)
     #/collision
-
+    #display info
+    #/display info
+    #draw
     for drawable in drawn_objects:
         drawable.draw()
+
+
+    #/draw
+    #game over
+    if game_over:
+        my_screen.makeBackground()
+        game_over_out = my_screen.font_out.render("game over. hit m to restart.", True, color.WHITE)
+        my_screen.screen.blit(game_over_out, (100,100))
+        bullets.clear()  #this is such a mess
+        enemies_list.clear()
+        keys    = key.get_pressed()
+        if  keys[K_m]:
+            print("restart")
+            player.points   = 0
+            game_over       = False
+    #/game over
+    #display score
+
+    score_text = my_screen.font_out.render(f"score: {player.points}", True, color.TEXT)
+    my_screen.screen.blit(score_text, my_screen.FONT_POS)
+    #/display score
     #if(player.auto_fire):
     #    player_ammo.shoot()
     #    player_ammo.pos[1]  -= player_ammo.speed
