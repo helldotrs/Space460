@@ -36,6 +36,12 @@ class AboutMe(): #make static?
 
 about_me    = AboutMe()
 
+class SystemClass():
+    def __init__(self):
+        self.rect_cap   = 1000
+
+system_class_inst   = SystemClass()
+
 
 class Color():
     def __init__(self):
@@ -79,16 +85,17 @@ my_screen    = MyScreen()
 
 class Player():
     def __init__(self):
-        self.pos    = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
-        self.size   = (16,  16)
-        self.limit  = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
-        self.speed  = (5,   0)                                                                           #no y movement
-        self.box    = Rect(self.pos, self.size)
-        self.keys   = key.get_pressed()     #this way does not work and I dont know why
+        self.pos        = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
+        self.size       = (16,  16)
+        self.limit      = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
+        self.speed      = (5,   0)                                                                           #no y movement
+        self.box        = Rect(self.pos, self.size)
+        self.keys       = key.get_pressed()     #this way does not work and I dont know why
         self.auto_fire  = False
-        self.kills  = 0
-        self.points = 0
-        self.lives  = 3 #for future updates
+        self.kills      = 0
+        self.points     = 0
+        self.lives      = 3 #for future updates
+        self.bullets    = []
 
     #movement and shooting
     def move(self):
@@ -182,11 +189,15 @@ class EnemyBullet(object):
     def draw(self):
         draw.rect(my_screen.screen, self.color, Rect(self.pos, self.size))
 
-
+class RectLists():
+    def __init__(self):
+        self.enemies_list       = []
+        self.enemies_bullets    = []
+        self.stars              = []
 enemies_list        = []
 enemies_bullets     = []
 stars               = []
-bullets             = []
+#bullets             = []
 bullet_clock        = 99999
 star_clock          = 99999
 bullet_fire_rate    = 7 #lower number higher rate
@@ -219,7 +230,7 @@ while running:
 
     #/add speed/destroy
     if True:
-        if len(stars) < 1000 and star_clock > bg_star.spawn_rate: #max 999 bullets,
+        if len(stars) < system_class_inst.rect_cap and star_clock > bg_star.spawn_rate: #max 999 bullets,
             star_clock = 0
             stars.append(BgStar())
     star_clock += 1
@@ -237,7 +248,7 @@ while running:
     #/background
     #enemies
     if enemy_inst.clock > enemy_inst.spawn_rate:
-        if len(enemies_list) < 1000:
+        if len(enemies_list) < system_class_inst.rect_cap:
             enemy_inst.clock = 0
             enemies_list.append(Enemy())
 
@@ -259,21 +270,21 @@ while running:
 
     #gun
     #move bullets. destroy bullets
-    for bullet in bullets:
+    for bullet in player.bullets:
         if bullet.pos[1] > 0:
             bullet.pos[1] -= bullet.speed
         else:
-            bullets.pop(bullets.index(bullet))
+            player.bullets.pop(player.bullets.index(bullet))
 
     #/add speed/destroy
     if player.auto_fire:
-        if len(bullets) < 1000 and bullet_clock > bullet_fire_rate: #max 999 bullets,
+        if len(player.bullets) < system_class_inst.rect_cap and bullet_clock > bullet_fire_rate: #max 999 bullets,
             bullet_clock = 0
-            bullets.append(PlayerAmmo())
+            player.bullets.append(PlayerAmmo())
     bullet_clock += 1
 
     #draw bullets
-    for bullet in bullets: #delete
+    for bullet in player.bullets: #delete
         bullet.draw()
     #/gun
     #collision
@@ -288,14 +299,14 @@ while running:
 
 
 
-        for bullet in bullets:
+        for bullet in player.bullets:
             col1    = Rect(bullet.pos,  bullet.size)
             col2    = Rect(enemy.pos,   enemy.size)
             if pygame.Rect.colliderect(col1, col2):
                 print("enemy death")
                 player.points   += 1
                 enemies_list.remove(enemy)
-                bullets.remove(bullet)
+                player.bullets.remove(bullet)
     #/collision
     #display info
     #/display info
@@ -310,7 +321,7 @@ while running:
         my_screen.makeBackground()
         game_over_out = my_screen.font_out.render("game over. hit m to restart.", True, color.WHITE)
         my_screen.screen.blit(game_over_out, (100,100))
-        bullets.clear()  #this is such a mess
+        player.bullets.clear()  #this is such a mess
         enemies_list.clear()
         keys    = key.get_pressed()
         if  keys[K_m]:
