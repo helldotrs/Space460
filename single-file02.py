@@ -1,7 +1,6 @@
 """
         Space 460 /\
             hellmak @ GitHub
-
 copyright 2021
 """
 #import
@@ -21,7 +20,6 @@ art:
         .
     star:
         *, +
-
 """
 #title
 display.set_caption("Space 460")
@@ -29,18 +27,18 @@ display.set_caption("Space 460")
 #classes
 class Color():
     def __init__(self):
-        self.WHITE  =(255,  255,    255 )
-        self.BLACK  =(0,    0,      0   )
-        self.RED    =(230,  0,      100 )            #looks dope, must use if game uses colors in future.
-        self.GRAY   =(153,  153,    153 )
-        self.GREEN  =(0,    204,    0   )
+        self.WHITE      = (255,  255,    255 )
+        self.BLACK      = (0,    0,      0   )
+        self.RED        = (230,  0,      100 )            #looks dope, must use if game uses colors in future.
+        self.GRAY       = (153,  153,    153 )
+        self.GREEN      = (0,    204,    0   )
 
-        self.bg     = self.BLACK
-        self.player = self.WHITE
-        self.bullet = self.GREEN
-        self.star   = self.GRAY
-        self.enemy  = self.RED
-        self.TEXT   = self.RED
+        self.bg         = self.BLACK
+        self.player     = self.WHITE
+        self.bullet     = self.GREEN
+        self.star       = self.GRAY
+        self.enemy      = self.RED
+        self.TEXT       = self.RED
 
 color   = Color()
 
@@ -62,20 +60,23 @@ class MyScreen():
     def makeBackground(self):
         self.screen.fill(color.bg)
 
+    def do(self):
+        self.makeBackground()
+
 my_screen    = MyScreen()
 
 class Player():
     def __init__(self):
-        self.pos    = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
-        self.size   = (16,  16)
-        self.limit  = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
-        self.speed  = (5,   0)                                                                           #no y movement
-        self.box    = Rect(self.pos, self.size)
-        self.keys   = key.get_pressed()     #this way does not work and I dont know why
+        self.pos        = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
+        self.size       = (16,  16)
+        self.limit      = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
+        self.speed      = (5,   0)                                                                           #no y movement
+        self.box        = Rect(self.pos, self.size)
+        self.keys       = key.get_pressed()     #this way does not work and I dont know why
         self.auto_fire  = False
-        self.kills  = 0
-        self.points = 0
-        self.lives  = 3 #for future updates
+        self.kills      = 0
+        self.points     = 0
+        self.lives      = 3 #for future updates
 
     #movement and shooting
     def move(self):
@@ -100,16 +101,19 @@ class Player():
 
     def draw(self):
         draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
+    
+    def do(self):
+        self.draw()
 
 player      = Player()
 
 
 class PlayerAmmo(object):
     def __init__(self):
-        self.size   = [3,3]
-        self.pos    = [(  player.pos[0] + ( (player.size[0]/2) - (self.size[0]/2) )  ), (player.pos[1] - player.size[0] - 1)]
-        self.speed  = 2
-        self.damage = 1
+        self.size       = [3,3]
+        self.pos        = [(  player.pos[0] + ( (player.size[0]/2) - (self.size[0]/2) )  ), (player.pos[1] - player.size[0] - 1)]
+        self.speed      = 2
+        self.damage     = 1
 
 
     def draw(self):
@@ -178,7 +182,7 @@ while running:
 
 
     #background
-    my_screen.makeBackground() #before drawing anything else
+    my_screen.do() #before drawing anything else
 
 
 
@@ -266,7 +270,7 @@ while running:
     #/display info
     #draw
     for drawable in drawn_objects:
-        drawable.draw()
+        drawable.do()
 
 
     #/draw
@@ -301,3 +305,5 @@ while running:
     my_clock.tick(60)
 quit()
 exit()
+
+
