@@ -176,7 +176,7 @@ running             = True
 my_clock            = time.Clock()
 game_over           = False
 
-drawn_objects = [player]
+do_objects = [player]
 
 while running:
     for evt in event.get():
@@ -275,8 +275,8 @@ while running:
     #display info
     #/display info
     #draw
-    for drawable in drawn_objects:
-        drawable.do()
+    for obj in do_objects:
+        obj.do()
 
 
     #/draw
