@@ -104,6 +104,7 @@ class Player():
     
     def do(self):
         self.draw()
+        self.move()
 
 player      = Player()
 
@@ -227,7 +228,7 @@ while running:
 
     #/enemies
 
-    player.move()
+    # player.move() moveed to be included in line 277
 
     #player.draw()
 
