@@ -1,7 +1,6 @@
 """
         Space 460 /\
             hellmak @ GitHub
-
 copyright 2021
 """
 #import
@@ -21,44 +20,25 @@ art:
         .
     star:
         *, +
-
 """
-
+#title
+display.set_caption("Space 460")
 
 #classes
-
-class AboutMe(): #make static?
-    def __init__(self):
-        self.name           = "Space 460"
-        self.version        = 0.0001
-        self.version_name   = "alpha"
-        self.caption        = f"{self.name} - {self.version} {self.version_name}"
-
-about_me    = AboutMe()
-
-class SystemClass():
-    def __init__(self):
-        self.rect_cap   = 1000
-
-system_class_inst   = SystemClass()
-
-
 class Color():
     def __init__(self):
-        self.WHITE  =(255,  255,    255 )
-        self.BLACK  =(0,    0,      0   )
-        self.RED    =(230,  0,      100 )            #looks dope, must use if game uses colors in future.
-        self.GRAY   =(153,  153,    153 )
-        self.GREEN  =(0,    204,    0   )
-        self.BLUE   =(77,   166,    255 )
+        self.WHITE      = (255,  255,    255 )
+        self.BLACK      = (0,    0,      0   )
+        self.RED        = (230,  0,      100 )            #looks dope, must use if game uses colors in future.
+        self.GRAY       = (153,  153,    153 )
+        self.GREEN      = (0,    204,    0   )
 
-        self.bg     = self.BLACK
-        self.player = self.WHITE
-        self.bullet = self.GREEN
-        self.star   = self.GRAY
-        self.enemy  = self.RED
-        self.TEXT   = self.RED
-        self.enemy_bullet = self.BLUE
+        self.bg         = self.BLACK
+        self.player     = self.WHITE
+        self.bullet     = self.GREEN
+        self.star       = self.GRAY
+        self.enemy      = self.RED
+        self.TEXT       = self.RED
 
 color   = Color()
 
@@ -75,11 +55,13 @@ class MyScreen():
         self.FONT_POS   = (10, 10)
         self.FONT_SIZE  = 16
         self.FONT_TYPE  = "Verdana"
-        #self.font_out   = pygame.font.SysFont(self.FONT_TYPE, self.FONT_SIZE) #pygame.
-        self.font_out   = pygame.font.Font(None, self.FONT_SIZE)
+        self.font_out   = pygame.font.SysFont(self.FONT_TYPE, self.FONT_SIZE) #pygame.
 
     def makeBackground(self):
         self.screen.fill(color.bg)
+
+    def do(self):
+        self.makeBackground()
 
 my_screen    = MyScreen()
 
@@ -95,7 +77,6 @@ class Player():
         self.kills      = 0
         self.points     = 0
         self.lives      = 3 #for future updates
-        self.bullets    = []
 
     #movement and shooting
     def move(self):
@@ -120,16 +101,19 @@ class Player():
 
     def draw(self):
         draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
+    
+    def do(self):
+        self.draw()
 
 player      = Player()
 
 
 class PlayerAmmo(object):
     def __init__(self):
-        self.size   = [3,3]
-        self.pos    = [(  player.pos[0] + ( (player.size[0]/2) - (self.size[0]/2) )  ), (player.pos[1] - player.size[0] - 1)]
-        self.speed  = 2
-        self.damage = 1
+        self.size       = [3,3]
+        self.pos        = [(  player.pos[0] + ( (player.size[0]/2) - (self.size[0]/2) )  ), (player.pos[1] - player.size[0] - 1)]
+        self.speed      = 2
+        self.damage     = 1
 
 
     def draw(self):
@@ -140,76 +124,56 @@ player_ammo = PlayerAmmo()                  #FIXME lazy temp for passing values 
 
 class BgStar(object):
     def __init__(self):
-        self.size_x     = random.randint(1,5)   #FIX ME: wonky property name
-        self.size       = [self.size_x,self.size_x]
-        self.pos        = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
-        self.speed      = round(random.uniform(0.5, 3), 3)
-        self.damage     = 1
-        self.spawn_rate = 10 #lower number --> spawns faster
+        self.size_x = random.randint(1,5)   #FIX ME: wonky property name
+        self.size   = [self.size_x,self.size_x]
+        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.speed  = round(random.uniform(0.5, 3), 3)
+        self.damage = 1
 
     def draw(self):
         draw.rect(my_screen.screen, color.star, Rect(self.pos, self.size))
+    
+    def do(self):
+        self.draw()
 
 
 bg_star     = BgStar()                          #FIXME lazy temp for passing values to Star
 
 class Enemy(object):
     def __init__(self):
-        self.size_x     = random.randint(10,        12)   #FIX ME: wonky property name
-        self.size       = [self.size_x,self.size_x]
-        self.pos        = [random.randint((-10),    (my_screen.WIDTH + 11)),-self.size[1]]
-        self.speed      = round(random.uniform(0.5, 3), 3)
-        self.damage     = 1
-        self.clock      = 999
-        self.spawn_rate = 20
-        self.random100  = [random.randint(0,        101)]
-        self.shooting   = 1
+        self.size_x = random.randint(10,12)   #FIX ME: wonky property name
+        self.size   = [self.size_x,self.size_x]
+        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.speed  = round(random.uniform(0.5, 3), 3)
+        self.damage = 1
+
 
     def draw(self):
         draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
 
-    def shooting(self):
-        if self.random  <= self.shooting:
-            draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
-
+    def do(self):
+        self.draw()
 
 
 enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
 
-class EnemyBullet(object):
-    def __init__(self):
-        self.size       = [3,3]
-        self.pos        = enemy_inst.pos
-        self.speed      = 4
-        self.damage     = 1
-        self.clock      = 999
-        self.spawn_rate = 20
-        self.color      = color.enemy_bullet
 
-    def draw(self):
-        draw.rect(my_screen.screen, self.color, Rect(self.pos, self.size))
-
-class RectLists():
-    def __init__(self):
-        self.enemies_list       = []
-        self.enemies_bullets    = []
-        self.stars              = []
 enemies_list        = []
-enemies_bullets     = []
 stars               = []
-#bullets             = []
+bullets             = []
 bullet_clock        = 99999
 star_clock          = 99999
+star_spawn_rate     = 10
+enemy_clock         = 99999
+enemy_spawn_rate    = 20
 bullet_fire_rate    = 7 #lower number higher rate
 running             = True
+
 my_clock            = time.Clock()
 game_over           = False
 
 drawn_objects = [player]
-#title
-display.set_caption(about_me.caption)
 
-#gameloop
 while running:
     for evt in event.get():
         if evt.type == QUIT:
@@ -221,16 +185,12 @@ while running:
                 player.auto_fire = not player.auto_fire #reverse boolean value
                 print(f"boolean auto_fire = {player.auto_fire}")
 
-
-
     #background
-    my_screen.makeBackground() #before drawing anything else
-
-
+    my_screen.do() #before drawing anything else
 
     #/add speed/destroy
     if True:
-        if len(stars) < system_class_inst.rect_cap and star_clock > bg_star.spawn_rate: #max 999 bullets,
+        if len(stars) < 1000 and star_clock > star_spawn_rate: #max 999 bullets,
             star_clock = 0
             stars.append(BgStar())
     star_clock += 1
@@ -244,23 +204,23 @@ while running:
 
     #draw stars
     for x in stars:
-        x.draw()
+        x.do()
     #/background
     #enemies
-    if enemy_inst.clock > enemy_inst.spawn_rate:
-        if len(enemies_list) < system_class_inst.rect_cap:
-            enemy_inst.clock = 0
+    if enemy_clock > enemy_spawn_rate:
+        if len(enemies_list) < 1000:
+            enemy_clock = 0
             enemies_list.append(Enemy())
 
     for x in enemies_list:
         if x.pos[1] < my_screen.HEIGHT: #FIXME make function/method
             x.pos[1] += x.speed
 
-    enemy_inst.clock += 1
+    enemy_clock += 1
 
     #draw enemy
     for x in enemies_list:
-        x.draw()
+        x.do()
 
     #/enemies
 
@@ -270,21 +230,21 @@ while running:
 
     #gun
     #move bullets. destroy bullets
-    for bullet in player.bullets:
+    for bullet in bullets:
         if bullet.pos[1] > 0:
             bullet.pos[1] -= bullet.speed
         else:
-            player.bullets.pop(player.bullets.index(bullet))
+            bullets.pop(bullets.index(bullet))
 
     #/add speed/destroy
     if player.auto_fire:
-        if len(player.bullets) < system_class_inst.rect_cap and bullet_clock > bullet_fire_rate: #max 999 bullets,
+        if len(bullets) < 1000 and bullet_clock > bullet_fire_rate: #max 999 bullets,
             bullet_clock = 0
-            player.bullets.append(PlayerAmmo())
+            bullets.append(PlayerAmmo())
     bullet_clock += 1
 
     #draw bullets
-    for bullet in player.bullets: #delete
+    for bullet in bullets: #delete
         bullet.draw()
     #/gun
     #collision
@@ -299,20 +259,20 @@ while running:
 
 
 
-        for bullet in player.bullets:
+        for bullet in bullets:
             col1    = Rect(bullet.pos,  bullet.size)
             col2    = Rect(enemy.pos,   enemy.size)
             if pygame.Rect.colliderect(col1, col2):
                 print("enemy death")
                 player.points   += 1
                 enemies_list.remove(enemy)
-                player.bullets.remove(bullet)
+                bullets.remove(bullet)
     #/collision
     #display info
     #/display info
     #draw
     for drawable in drawn_objects:
-        drawable.draw()
+        drawable.do()
 
 
     #/draw
@@ -321,7 +281,7 @@ while running:
         my_screen.makeBackground()
         game_over_out = my_screen.font_out.render("game over. hit m to restart.", True, color.WHITE)
         my_screen.screen.blit(game_over_out, (100,100))
-        player.bullets.clear()  #this is such a mess
+        bullets.clear()  #this is such a mess
         enemies_list.clear()
         keys    = key.get_pressed()
         if  keys[K_m]:
@@ -347,3 +307,5 @@ while running:
     my_clock.tick(60)
 quit()
 exit()
+
+
