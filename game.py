@@ -119,6 +119,9 @@ class PlayerAmmo(object):
     def draw(self):
         draw.rect(my_screen.screen, color.bullet, Rect(self.pos, self.size))
 
+    def do(self):
+        self.draw()
+
 player_ammo = PlayerAmmo()                  #FIXME lazy temp for passing values to Star
 
 
@@ -245,7 +248,7 @@ while running:
 
     #draw bullets
     for bullet in bullets: #delete
-        bullet.draw()
+        bullet.do()
     #/gun
     #collision
     #collide = pygame.Rect.colliderect(player_rect, player_rect2)
