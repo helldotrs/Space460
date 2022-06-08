@@ -173,10 +173,14 @@ enemy_spawn_rate    = 20
 bullet_fire_rate    = 7 #lower number higher rate
 running             = True
 
+players             = [player]  #makes it easier to make game multiplayer in future
+non_lists           = []
+do_objects          = [players, non_lists, stars] #only put lists in this list
+
 my_clock            = time.Clock()
 game_over           = False
 
-do_objects = [player]
+
 
 while running:
     for evt in event.get():
@@ -205,10 +209,6 @@ while running:
             x.pos[1] += x.speed
         else:
             stars.pop(stars.index(x))
-
-    #draw stars
-    for x in stars:
-        x.do()
     #/background
     #enemies
     if enemy_clock > enemy_spawn_rate:
@@ -276,7 +276,8 @@ while running:
     #/display info
     #draw
     for obj in do_objects:
-        obj.do()
+        for x in obj:
+            x.do()
 
 
     #/draw
