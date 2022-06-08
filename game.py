@@ -175,7 +175,7 @@ running             = True
 
 players             = [player]  #makes it easier to make game multiplayer in future
 non_lists           = []
-do_objects          = [players, non_lists, stars, bullets] #only put lists in this list
+do_objects          = [players, non_lists, stars, bullets, enemies_list] #only put lists in this list
 
 my_clock            = time.Clock()
 game_over           = False
@@ -221,11 +221,6 @@ while running:
             x.pos[1] += x.speed
 
     enemy_clock += 1
-
-    #draw enemy
-    for x in enemies_list:
-        x.do()
-
     #/enemies
 
     # player.move() moveed to be included in line 277
@@ -247,9 +242,6 @@ while running:
             bullets.append(PlayerAmmo())
     bullet_clock += 1
 
-    #draw bullets
-    #for bullet in bullets: #delete
-    #    bullet.do()
     #/gun
     #collision
     #collide = pygame.Rect.colliderect(player_rect, player_rect2)
