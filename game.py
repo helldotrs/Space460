@@ -40,7 +40,7 @@ class Color():
         self.enemy      = self.RED
         self.TEXT       = self.RED
 
-color   = Color()
+color       = Color()
 
 class MyScreen():
     def __init__(self):
@@ -223,10 +223,6 @@ while running:
     enemy_clock += 1
     #/enemies
 
-    # player.move() moveed to be included in line 277
-
-    #player.draw()
-
     #gun
     #move bullets. destroy bullets
     for bullet in bullets:
@@ -251,9 +247,6 @@ while running:
         if pygame.Rect.colliderect(col1, col2):
             print("player death")
             game_over   = True
-
-
-
 
         for bullet in bullets:
             col1    = Rect(bullet.pos,  bullet.size)
