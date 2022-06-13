@@ -150,13 +150,18 @@ class Enemy(object):
         self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
         self.speed  = round(random.uniform(0.5, 3), 3)
         self.damage = 1
+        self.type   = "standard" #standard, vfighter, missile
 
 
     def draw(self):
         draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
 
+    def v_fighter(self):
+        pass
+
     def do(self):
         self.draw()
+        self.v_fighter()
 
 
 enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
