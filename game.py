@@ -151,17 +151,35 @@ class Enemy(object):
         self.speed  = round(random.uniform(0.5, 3), 3)
         self.damage = 1
         self.type   = "standard" #standard, vfighter, missile
+        self.clock  = 1
 
 
     def draw(self):
         draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
-
-    def v_fighter(self):
+    #enemy types
+    def standard(self):
         pass
+    
+    def v_fighter(self):
+        if (self.clock % 10 == 0): 
+            self.clock = 1
+            #create missile with positive y and positive x
+            #create missile with positivt y and negative x
+        else:
+            self.clock += 1
+
+    def missile(self):
+        pass
+    #/enemy types
 
     def do(self):
         self.draw()
-        self.v_fighter()
+        if  (self.type == "vfighter"):
+            self.v_fighter()
+        elif(self.type == "missile"):
+            self.missile()
+        else:
+            self.standard()
 
 
 enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
