@@ -38,6 +38,7 @@ class Color():
         self.bullet     = self.GREEN
         self.star       = self.GRAY
         self.enemy      = self.RED
+        self.missile    = self.GREEN #FIXME add blue and change to blue
         self.TEXT       = self.RED
 
 color       = Color()
@@ -144,32 +145,49 @@ class BgStar(object):
 bg_star     = BgStar()                          #FIXME lazy temp for passing values to Star
 
 class Enemy(object):
-    def __init__(self):
-        self.size_x = random.randint(10,12)   #FIX ME: wonky property name
-        self.size   = [self.size_x,self.size_x]
-        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
-        self.speed  = round(random.uniform(0.5, 3), 3)
-        self.damage = 1
-        self.type   = "standard" #standard, vfighter, missile
-        self.clock  = 1
+    def __init__(self, type = "standard", direction = "center", alt_pos = [0, 0]):
+        self.size_x     = random.randint(10,12)   #FIX ME: wonky property name
+        self.size       = [self.size_x,self.size_x]
+        self.pos        = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.speed      = round(random.uniform(0.5, 3), 3)
+        self.damage     = 1
+        self.type       = type #"standard" #standard, vfighter, missile
+        self.clock      = 1
+        self.direction  = direction
+        self.color      = color.enemy
+        self.alt_pos    = alt_pos
 
 
     def draw(self):
-        draw.rect(my_screen.screen, color.enemy, Rect(self.pos, self.size))
+        if self.alt_pos[0] and self.alt_pos[1] == 0:
+            draw.rect(my_screen.screen, self.color, Rect(self.alt_pos, self.size))
+        else:
+            draw.rect(my_screen.screen, self.color, Rect(self.pos, self.size))
     #enemy types
     def standard(self):
         pass
     
     def v_fighter(self):
-        if (self.clock % 10 == 0): 
+        #if (self.clock % 20 == 0): 
+        if (random.randint(1,40)) == 1:
             self.clock = 1
             #create missile with positive y and positive x
             #create missile with positivt y and negative x
+            if len(enemies_list) < 1000:            
+                enemies_list.append(Enemy("missile", "left",    self.pos))
+                enemies_list.append(Enemy("missile", "right",   self.pos))
         else:
             self.clock += 1
 
     def missile(self):
-        pass
+        self.color = color.missile
+        if(self.direction == "left"):
+            # go x - 1
+            print("place holder")
+        else:
+            # go y + 1
+            print("place holder")
+        
     #/enemy types
 
     def do(self):
@@ -182,7 +200,7 @@ class Enemy(object):
             self.standard()
 
 
-enemy_inst  = Enemy()                          #FIXME lazy temp for passing values to enemy_instz
+enemy_inst          = Enemy("standard")                          #FIXME lazy temp for passing values to enemy_instz
 
 
 enemies_list        = []
@@ -195,6 +213,8 @@ enemy_clock         = 99999
 enemy_spawn_rate    = 20
 bullet_fire_rate    = 7 #lower number higher rate
 running             = True
+
+flip_switch_bool    = True #used for missile direction, might be used for other things as well in future
 
 players             = [player]  #makes it easier to make game multiplayer in future
 non_lists           = []
@@ -237,11 +257,21 @@ while running:
     if enemy_clock > enemy_spawn_rate:
         if len(enemies_list) < 1000:
             enemy_clock = 0
-            enemies_list.append(Enemy())
+            if (random.randint(1,10)) == 1: #FIXME rate should be decided by level #FIXME value should not be hardcoded
+                enemies_list.append(Enemy("vfighter"))
+            else:
+                enemies_list.append(Enemy("standard")) 
+                
 
-    for x in enemies_list:
-        if x.pos[1] < my_screen.HEIGHT: #FIXME make function/method
-            x.pos[1] += x.speed
+    for i in enemies_list: ##FIXME: move into class?
+        if i.pos[1] < my_screen.HEIGHT: #FIXME make function/method
+            i.pos[1] += i.speed
+            
+            if      i.direction == "left":
+                i.pos[0] -= i.speed
+            elif    i.direction == "right":
+                i.pos[0] += i.speed
+
 
     enemy_clock += 1
     #/enemies
