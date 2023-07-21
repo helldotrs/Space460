@@ -1,30 +1,35 @@
-"""
-        Space 460 /\
-            hellmak @ GitHub
-copyright 2021
-"""
-#import
-from sys import exit
-from pygame import *
 import pygame
 import random
+import sys
 
 pygame.init()
 
-"""
-to be implimented:
-art:
-    ship:
-        /\
-    bullet:
-        .
-    star:
-        *, +
-"""
-#title
-display.set_caption("Space 460")
+# Constants
+WIDTH = 500
+HEIGHT = 500
+SIZE = (WIDTH, HEIGHT)
+CENTER_X = WIDTH // 2
+CENTER_Y = HEIGHT // 2
+CENTER = (CENTER_X, CENTER_Y)
 
-#classes
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (230, 0, 100)
+GRAY = (153, 153, 153)
+GREEN = (0, 204, 0)
+BLUE = (117, 182, 243)
+
+# Initialize Pygame
+screen = pygame.display.set_mode(SIZE)
+pygame.display.set_caption("Space 460")
+
+# Clock Rates
+BULLET_FIRE_RATE = 7
+STAR_SPAWN_RATE = 10
+ENEMY_SPAWN_RATE = 20
+
+# Classes
 class Color():
     def __init__(self):
         self.WHITE      = (255,     255,    255 )
@@ -41,8 +46,6 @@ class Color():
         self.enemy      = self.RED
         self.missile    = self.BLUE #FIXME add blue and change to blue
         self.TEXT       = self.RED
-
-color       = Color()
 
 class MyScreen():
     def __init__(self):
@@ -64,9 +67,7 @@ class MyScreen():
 
     def do(self):
         self.makeBackground()
-
-my_screen    = MyScreen()
-
+            
 class Player():
     def __init__(self):
         self.pos        = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
@@ -101,16 +102,7 @@ class Player():
 
         #y movement removed in self.speed[1]
 
-    def draw(self):
-        draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
-    
-    def do(self):
-        self.draw()
-        self.move()
-
-player      = Player()
-
-
+            
 class PlayerAmmo(object):
     def __init__(self):
         self.size       = [3,3]
@@ -124,8 +116,6 @@ class PlayerAmmo(object):
 
     def do(self):
         self.draw()
-
-player_ammo = PlayerAmmo()                  #FIXME lazy temp for passing values to Star
 
 
 class BgStar(object):
@@ -141,9 +131,6 @@ class BgStar(object):
     
     def do(self):
         self.draw()
-
-
-bg_star     = BgStar()                          #FIXME lazy temp for passing values to Star
 
 class Enemy(object):
     def __init__(self, type = "standard", direction = "center", alt_pos = [0, 0]):
@@ -200,156 +187,123 @@ class Enemy(object):
         else:
             self.standard()
 
+# Game objects
+color = Color()
+my_screen = MyScreen()
+player = Player()
+player_ammo = PlayerAmmo()
+bg_star = BgStar()
+enemy_inst = Enemy("standard")
+enemies_list = []
+stars = []
+bullets = []
 
-enemy_inst          = Enemy("standard")                          #FIXME lazy temp for passing values to enemy_instz
+# Helper functions
+def detect_collisions():
+    global player, player_ammo, enemies_list, bullets
 
+    player_rect = pygame.Rect(player.pos, player.size)
 
-enemies_list        = []
-stars               = []
-bullets             = []
-bullet_clock        = 99999
-star_clock          = 99999
-star_spawn_rate     = 10
-enemy_clock         = 99999
-enemy_spawn_rate    = 20
-bullet_fire_rate    = 7 #lower number higher rate
-running             = True
-
-flip_switch_bool    = True #used for missile direction, might be used for other things as well in future
-
-players             = [player]  #makes it easier to make game multiplayer in future
-non_lists           = []
-do_objects          = [players, non_lists, stars, bullets, enemies_list] #only put lists in this list
-
-my_clock            = time.Clock()
-game_over           = False
-
-
-
-while running:
-    for evt in event.get():
-        if evt.type == QUIT:
-            running = False
-        #toggle:
-        elif evt.type == KEYDOWN: #tells you if event is relatet to keyboard -EMC235
-            #toggle auto_fire:
-            if evt.key == K_SPACE: #if the type of the event is KEYDOWN that means it has a .key attribute ant it van be any key -EMC235
-                player.auto_fire = not player.auto_fire #reverse boolean value
-                print(f"boolean auto_fire = {player.auto_fire}")
-
-    #background
-    my_screen.do() #before drawing anything else
-
-    #/add speed/destroy
-    if True:
-        if len(stars) < 1000 and star_clock > star_spawn_rate: #max 999 bullets,
-            star_clock = 0
-            stars.append(BgStar())
-    star_clock += 1
-
-    #move stars. destroy stars
-    for x in stars:
-        if x.pos[1] < my_screen.HEIGHT:
-            x.pos[1] += x.speed
-        else:
-            stars.pop(stars.index(x))
-    #/background
-    #enemies
-    if enemy_clock > enemy_spawn_rate:
-        if len(enemies_list) < 1000:
-            enemy_clock = 0
-            if (random.randint(1,10)) == 1: #FIXME rate should be decided by level #FIXME value should not be hardcoded
-                enemies_list.append(Enemy("vfighter"))
-            else:
-                enemies_list.append(Enemy("standard")) 
-                
-
-    for i in enemies_list: ##FIXME: move into class?
-        if i.pos[1] < my_screen.HEIGHT: #FIXME make function/method
-            i.pos[1] += i.speed
-            
-            if      i.direction == "left":
-                i.pos[0] -= i.speed
-            elif    i.direction == "right":
-                i.pos[0] += i.speed
-
-
-    enemy_clock += 1
-    #/enemies
-
-    #gun
-    #move bullets. destroy bullets
-    for bullet in bullets:
-        if bullet.pos[1] > 0:
-            bullet.pos[1] -= bullet.speed
-        else:
-            bullets.pop(bullets.index(bullet))
-
-    #/add speed/destroy
-    if player.auto_fire:
-        if len(bullets) < 1000 and bullet_clock > bullet_fire_rate: #max 999 bullets,
-            bullet_clock = 0
-            bullets.append(PlayerAmmo())
-    bullet_clock += 1
-
-    #/gun
-    #collision
-    #collide = pygame.Rect.colliderect(player_rect, player_rect2)
-    for enemy in enemies_list:
-        col1    = Rect(player.pos,  player.size)
-        col2    = Rect(enemy.pos,   enemy.size)
-        if pygame.Rect.colliderect(col1, col2):
+    for enemy in enemies_list[:]:
+        enemy_rect = pygame.Rect(enemy.pos, enemy.size)
+        if player_rect.colliderect(enemy_rect):
             print("player death")
-            game_over   = True
+            return True
 
-        for bullet in bullets:
-            col1    = Rect(bullet.pos,  bullet.size)
-            col2    = Rect(enemy.pos,   enemy.size)
-            if pygame.Rect.colliderect(col1, col2):
+        for bullet in bullets[:]:
+            bullet_rect = pygame.Rect(bullet.pos, bullet.size)
+            if bullet_rect.colliderect(enemy_rect):
                 print("enemy death")
-                player.points   += 1
+                player.points += 1
                 enemies_list.remove(enemy)
                 bullets.remove(bullet)
-    #/collision
-    #display info
-    #/display info
-    #draw
-    for obj in do_objects:
+
+    return False
+
+def handle_game_over():
+    global game_over, bullets, enemies_list
+
+    my_screen.makeBackground()
+    game_over_out = my_screen.font_out.render("game over. hit m to restart.", True, color.WHITE)
+    my_screen.screen.blit(game_over_out, (100, 100))
+    bullets.clear()
+    enemies_list.clear()
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_m]:
+        print("restart")
+        player.points = 0
+        player.lives = 3
+        player.pos = [CENTER_X, HEIGHT - 50]
+        game_over = False
+
+# Game loop
+my_clock = pygame.time.Clock()
+game_over = False
+
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+
+    # Handle player input
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_SPACE]:
+        player.auto_fire = not player.auto_fire
+        print(f"auto_fire = {player.auto_fire}")
+
+    # Game logic
+    my_screen.makeBackground()
+
+    if len(stars) < 1000:
+        if random.randint(1, STAR_SPAWN_RATE) == 1:
+            stars.append(BgStar())
+
+    for star in stars[:]:
+        if star.pos[1] < HEIGHT:
+            star.pos[1] += star.speed
+        else:
+            stars.remove(star)
+
+    if len(enemies_list) < 1000:
+        if enemy_clock > ENEMY_SPAWN_RATE and random.randint(1, 10) == 1:
+            enemy_clock = 0
+            enemy_type = "vfighter" if random.randint(1, 40) == 1 else "standard"
+            enemies_list.append(Enemy(enemy_type))
+        else:
+            enemy_clock += 1
+
+    for enemy in enemies_list:
+        if enemy.pos[1] < HEIGHT:
+            enemy.pos[1] += enemy.speed
+            if enemy.direction == "left":
+                enemy.pos[0] -= enemy.speed
+            elif enemy.direction == "right":
+                enemy.pos[0] += enemy.speed
+
+    if player.auto_fire:
+        if len(bullets) < 1000:
+            if bullet_clock > BULLET_FIRE_RATE:
+                bullet_clock = 0
+                bullets.append(PlayerAmmo())
+            else:
+                bullet_clock += 1
+
+    # Draw objects
+    for obj in [stars, bullets, enemies_list, player]:
         for x in obj:
             x.do()
 
+    # Detect collisions and handle game over
+    if detect_collisions():
+        game_over = True
 
-    #/draw
-    #game over
-    if game_over:
-        my_screen.makeBackground()
-        game_over_out = my_screen.font_out.render("game over. hit m to restart.", True, color.WHITE)
-        my_screen.screen.blit(game_over_out, (100,100))
-        bullets.clear()  #this is such a mess
-        enemies_list.clear()
-        keys    = key.get_pressed()
-        if  keys[K_m]:
-            print("restart")
-            player.points   = 0
-            game_over       = False
-    #/game over
-    #display score
-
-    score_text = my_screen.font_out.render(f"score: {player.points}", True, color.TEXT)
+    # Display score
+    score_text = my_screen.font_out.render(f"Score: {player.points}", True, color.RED)
     my_screen.screen.blit(score_text, my_screen.FONT_POS)
-    #/display score
-    #if(player.auto_fire):
-    #    player_ammo.shoot()
-    #    player_ammo.pos[1]  -= player_ammo.speed
 
-
-
-    ################################################################
-
-
-    display.flip()
+    pygame.display.flip()
     my_clock.tick(60)
-quit()
-exit()
 
-
+# Quit the game
+pygame.quit()
+sys.exit()
