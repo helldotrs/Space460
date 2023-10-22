@@ -219,8 +219,16 @@ game_over           = False
 ##      2023 rewrite       ##
 ##          start          ##
 ######### ######### #########
+
 def remove_offscreen_list_items(input_list):
-    pass
+    new_list = []
+    for item in input_list:
+        x, y = item.pos
+        if -(my_screen.WIDTH / 2) <= x <= my_screen.WIDTH + (my_screen.WIDTH / 2) and \
+           -(my_screen.HEIGHT / 2) <= y <= my_screen.HEIGHT + (my_screen.HEIGHT / 2):
+            new_list.append(item)
+    return new_list
+
 
 
 ######### ######### #########
