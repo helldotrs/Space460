@@ -215,6 +215,19 @@ my_clock            = time.Clock()
 game_over           = False
 
 
+######### ######### #########
+##      2023 rewrite       ##
+##          start          ##
+######### ######### #########
+def remove_offscreen_list_items(input_list):
+    pass
+
+
+######### ######### #########
+##      2023 rewrite       ##
+##           end           ##
+######### ######### #########
+
 
 while running:
     for evt in event.get():
@@ -242,7 +255,7 @@ while running:
         if x.pos[1] < my_screen.HEIGHT:
             x.pos[1] += x.speed
         else:
-            stars.pop(stars.index(x))
+            stars.remove(x)
     #/background
     #enemies
     if enemy_clock > enemy_spawn_rate:
@@ -262,6 +275,7 @@ while running:
                 i.pos[0] -= i.speed
             elif    i.direction == "right":
                 i.pos[0] += i.speed
+
 
 
     enemy_clock += 1
