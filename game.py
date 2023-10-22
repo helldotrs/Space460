@@ -1,7 +1,7 @@
 """
         Space 460 /\
             hellmak @ GitHub
-copyright 2021
+copyright 2021, 2023
 """
 #import
 from sys import exit
@@ -11,16 +11,6 @@ import random
 
 pygame.init()
 
-"""
-to be implimented:
-art:
-    ship:
-        /\
-    bullet:
-        .
-    star:
-        *, +
-"""
 #title
 display.set_caption("Space 460")
 

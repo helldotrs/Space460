@@ -1,0 +1,10 @@
+"""
+to be implimented:
+art:
+    ship:
+        /\
+    bullet:
+        .
+    star:
+        *, +
+"""
