@@ -19,6 +19,9 @@ display.set_caption("Space 460")
 ##          start          ##
 ######### ######### #########
 
+INVINCIBILITY   = True # for troubleshooting
+MAX_LIST_ITEMS  = 999
+
 def remove_offscreen_list_items(input_list):
     new_list = []
     for item in input_list:
@@ -27,6 +30,11 @@ def remove_offscreen_list_items(input_list):
            -(my_screen.HEIGHT / 2) <= y <= my_screen.HEIGHT + (my_screen.HEIGHT / 2):
             new_list.append(item)
     return new_list
+
+def enforce_list_size(input_list):
+    return input_list[-MAX_LIST_ITEMS:]
+
+
 
 
 
@@ -212,7 +220,7 @@ class Enemy(object):
             self.standard()
 
 
-enemy_inst          = Enemy("standard")                          #FIXME lazy temp for passing values to enemy_instz
+enemy_inst          = Enemy("standard")                          #FIXME lazy temp for passing values to enemy_instz #FIXME: 2023: the hell is this for?
 
 
 enemies_list        = []
@@ -254,6 +262,10 @@ while running:
     ##      2023 rewrite       ##
     ##          start          ##
     ######### ######### #########
+
+    enforce_list_size(enemies_list)
+    enforce_list_size(stars)
+    enforce_list_size(bullets)
 
     remove_offscreen_list_items(enemies_list)
     remove_offscreen_list_items(stars)
@@ -325,7 +337,8 @@ while running:
         col2    = Rect(enemy.pos,   enemy.size)
         if pygame.Rect.colliderect(col1, col2):
             print("player death")
-            game_over   = True
+            if not INVINCIBILITY:
+                game_over   = True
 
         for bullet in bullets:
             col1    = Rect(bullet.pos,  bullet.size)
@@ -363,9 +376,6 @@ while running:
     score_text = my_screen.font_out.render(f"score: {player.points}", True, color.TEXT)
     my_screen.screen.blit(score_text, my_screen.FONT_POS)
     #/display score
-    #if(player.auto_fire):
-    #    player_ammo.shoot()
-    #    player_ammo.pos[1]  -= player_ammo.speed
 
 
 
