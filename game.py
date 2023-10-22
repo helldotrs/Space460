@@ -14,6 +14,27 @@ pygame.init()
 #title
 display.set_caption("Space 460")
 
+######### ######### #########
+##      2023 rewrite       ##
+##          start          ##
+######### ######### #########
+
+def remove_offscreen_list_items(input_list):
+    new_list = []
+    for item in input_list:
+        x, y = item.pos
+        if -(my_screen.WIDTH / 2) <= x <= my_screen.WIDTH + (my_screen.WIDTH / 2) and \
+           -(my_screen.HEIGHT / 2) <= y <= my_screen.HEIGHT + (my_screen.HEIGHT / 2):
+            new_list.append(item)
+    return new_list
+
+
+
+######### ######### #########
+##      2023 rewrite       ##
+##           end           ##
+######### ######### #########
+
 #classes
 class Color():
     def __init__(self):
@@ -215,26 +236,7 @@ my_clock            = time.Clock()
 game_over           = False
 
 
-######### ######### #########
-##      2023 rewrite       ##
-##          start          ##
-######### ######### #########
 
-def remove_offscreen_list_items(input_list):
-    new_list = []
-    for item in input_list:
-        x, y = item.pos
-        if -(my_screen.WIDTH / 2) <= x <= my_screen.WIDTH + (my_screen.WIDTH / 2) and \
-           -(my_screen.HEIGHT / 2) <= y <= my_screen.HEIGHT + (my_screen.HEIGHT / 2):
-            new_list.append(item)
-    return new_list
-
-
-
-######### ######### #########
-##      2023 rewrite       ##
-##           end           ##
-######### ######### #########
 
 
 while running:
@@ -248,6 +250,22 @@ while running:
                 player.auto_fire = not player.auto_fire #reverse boolean value
                 print(f"boolean auto_fire = {player.auto_fire}")
 
+    ######### ######### #########
+    ##      2023 rewrite       ##
+    ##          start          ##
+    ######### ######### #########
+
+    remove_offscreen_list_items(enemies_list)
+    remove_offscreen_list_items(stars)
+    remove_offscreen_list_items(bullets)
+
+
+
+    ######### ######### #########
+    ##      2023 rewrite       ##
+    ##           end           ##
+    ######### ######### #########
+
     #background
     my_screen.do() #before drawing anything else
 
@@ -258,12 +276,10 @@ while running:
             stars.append(BgStar())
     star_clock += 1
 
-    #move stars. destroy stars
+    #move stars
     for x in stars:
-        if x.pos[1] < my_screen.HEIGHT:
-            x.pos[1] += x.speed
-        else:
-            stars.remove(x)
+        x.pos[1] += x.speed
+
     #/background
     #enemies
     if enemy_clock > enemy_spawn_rate:
@@ -274,9 +290,8 @@ while running:
             else:
                 enemies_list.append(Enemy("standard")) 
                 
-
+    #enemy movement
     for i in enemies_list: ##FIXME: move into class?
-        if i.pos[1] < my_screen.HEIGHT: #FIXME make function/method
             i.pos[1] += i.speed
             
             if      i.direction == "left":
@@ -290,12 +305,10 @@ while running:
     #/enemies
 
     #gun
-    #move bullets. destroy bullets
+    #move bullets
     for bullet in bullets:
-        if bullet.pos[1] > 0:
             bullet.pos[1] -= bullet.speed
-        else:
-            bullets.pop(bullets.index(bullet))
+
 
     #/add speed/destroy
     if player.auto_fire:
