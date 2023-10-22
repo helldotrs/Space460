@@ -31,7 +31,11 @@ def remove_offscreen_list_items(input_list):
             new_list.append(item)
     return new_list
 
+
 def enforce_list_size(input_list):
+    while len(input_list) > MAX_LIST_ITEMS:
+        input_list.pop(0)
+    return input_list
     return input_list[-MAX_LIST_ITEMS:]
 
 
@@ -186,7 +190,7 @@ class Enemy(object):
     #enemy types
     def standard(self):
         pass
-    
+    """
     def v_fighter(self):
         #if (self.clock % 20 == 0): 
         if (random.randint(1,40)) == 1:
@@ -198,7 +202,7 @@ class Enemy(object):
                 enemies_list.append(Enemy("missile", "right",   self.pos))
         else:
             self.clock += 1
-
+    """
     def missile(self):
         self.color = color.missile
         if(self.direction == "left"):
@@ -258,25 +262,7 @@ while running:
                 player.auto_fire = not player.auto_fire #reverse boolean value
                 print(f"boolean auto_fire = {player.auto_fire}")
 
-    ######### ######### #########
-    ##      2023 rewrite       ##
-    ##          start          ##
-    ######### ######### #########
 
-    enforce_list_size(enemies_list)
-    enforce_list_size(stars)
-    enforce_list_size(bullets)
-
-    remove_offscreen_list_items(enemies_list)
-    remove_offscreen_list_items(stars)
-    remove_offscreen_list_items(bullets)
-
-
-
-    ######### ######### #########
-    ##      2023 rewrite       ##
-    ##           end           ##
-    ######### ######### #########
 
     #background
     my_screen.do() #before drawing anything else
@@ -297,7 +283,7 @@ while running:
     if enemy_clock > enemy_spawn_rate:
         if len(enemies_list) < 1000:
             enemy_clock = 0
-            if (random.randint(1,10)) == 1: #FIXME rate should be decided by level #FIXME value should not be hardcoded
+            if False: #FIXME #(random.randint(1,10)) == 1: #FIXME rate should be decided by level #FIXME value should not be hardcoded
                 enemies_list.append(Enemy("vfighter"))
             else:
                 enemies_list.append(Enemy("standard")) 
@@ -373,10 +359,28 @@ while running:
     #/game over
     #display score
 
-    score_text = my_screen.font_out.render(f"score: {player.points}", True, color.TEXT)
+    score_text = my_screen.font_out.render(f"score: {player.points}\n enemies: {len(enemies_list)}\n stars: {len(stars)}\n bullets:{len(bullets)}", True, color.TEXT)
     my_screen.screen.blit(score_text, my_screen.FONT_POS)
     #/display score
 
+    ######### ######### #########
+    ##      2023 rewrite       ##
+    ##          start          ##
+    ######### ######### #########
+
+
+    enemies_list = remove_offscreen_list_items(enemies_list)
+    stars = remove_offscreen_list_items(stars)
+
+    enemies_list = enforce_list_size(enemies_list)
+    stars = enforce_list_size(stars)
+    bullets = enforce_list_size(bullets)
+
+
+    ######### ######### #########
+    ##      2023 rewrite       ##
+    ##           end           ##
+    ######### ######### #########
 
 
     ################################################################
@@ -384,6 +388,8 @@ while running:
 
     display.flip()
     my_clock.tick(60)
+
+
 quit()
 exit()
 
