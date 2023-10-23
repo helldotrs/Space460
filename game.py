@@ -24,17 +24,18 @@ MAX_LIST_ITEMS  = 999
 
 
 
-MAX_OFFSCREEN_WIDTH     = (my_screen.WIDTH) / 2
+MAX_OFFSCREEN_WIDTH     = 100 #(my_screen.WIDTH) / 2
 MAX_OFFSCREEN_HEIGHT    = 10
 
 def remove_offscreen_list_items(input_list):
-    new_list = []
+    items_to_remove = []
     for item in input_list:
         x, y = item.pos
-        if ( - MAX_OFFSCREEN_WIDTH  )   <= x <= ( MAX_OFFSCREEN_WIDTH  ) and \
-           ( - MAX_OFFSCREEN_HEIGHT )   <= y <= ( MAX_OFFSCREEN_HEIGHT ):
-            new_list.append(item)
-    return new_list
+        if not (-MAX_OFFSCREEN_WIDTH <= x <= MAX_OFFSCREEN_WIDTH) and (-MAX_OFFSCREEN_HEIGHT <= y <= MAX_OFFSCREEN_HEIGHT):
+            items_to_remove.append(item)
+
+    for item in items_to_remove:
+        input_list.remove(item)
 
 
 def enforce_list_size(input_list):
@@ -100,9 +101,8 @@ class Player():
         self.pos        = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
         self.size       = (16,  16)
         self.limit      = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
-        self.speed      = (5,   0)                                                                           #no y movement
+        self.speed      = (5,   0)         #no y movement
         self.box        = Rect(self.pos, self.size)
-        self.keys       = key.get_pressed()     #this way does not work and I dont know why
         self.auto_fire  = False
         self.kills      = 0
         self.points     = 0
@@ -110,8 +110,7 @@ class Player():
 
     #movement and shooting
     def move(self):
-        keys    = key.get_pressed()
-
+        keys    = pygame.key.get_pressed() # added pygame. for clarity
 
         if  keys[K_LEFT]    and self.pos[0] >= self.limit[0]:
             self.pos[0] -= self.speed[0]
@@ -255,7 +254,7 @@ game_over           = False
 
 
 
-
+# main loop / game loop
 while running:
     for evt in event.get():
         if evt.type == QUIT:
@@ -316,7 +315,7 @@ while running:
 
     #/add speed/destroy
     if player.auto_fire:
-        if len(bullets) < 1000 and bullet_clock > bullet_fire_rate: #max 999 bullets,
+        if bullet_clock > bullet_fire_rate:
             bullet_clock = 0
             bullets.append(PlayerAmmo())
     bullet_clock += 1
@@ -377,10 +376,11 @@ while running:
 
     #enemies_list = remove_offscreen_list_items(enemies_list)
     #stars = remove_offscreen_list_items(stars)
+    remove_offscreen_list_items(bullets)
 
     #enemies_list = enforce_list_size(enemies_list)
     #stars = enforce_list_size(stars)
-    bullets = enforce_list_size(bullets)
+    #bullets = enforce_list_size(bullets)
 
 
     ######### ######### #########
