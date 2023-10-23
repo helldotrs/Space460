@@ -20,10 +20,7 @@ display.set_caption("Space 460")
 ######### ######### #########
 
 INVINCIBILITY   = True # for troubleshooting
-MAX_LIST_ITEMS  = 999
-
-
-
+MAX_LIST_ITEMS  = 10
 MAX_OFFSCREEN_WIDTH     = 100 #(my_screen.WIDTH) / 2
 MAX_OFFSCREEN_HEIGHT    = 10
 
@@ -37,12 +34,9 @@ def remove_offscreen_list_items(input_list):
     for item in items_to_remove:
         input_list.remove(item)
 
-
 def enforce_list_size(input_list):
     while len(input_list) > MAX_LIST_ITEMS:
-        input_list.pop(0)
-    return input_list
-    return input_list[-MAX_LIST_ITEMS:]
+        del input_list[0]
 
 
 
@@ -380,7 +374,7 @@ while running:
 
     #enemies_list = enforce_list_size(enemies_list)
     #stars = enforce_list_size(stars)
-    #bullets = enforce_list_size(bullets)
+    enforce_list_size(bullets)
 
 
     ######### ######### #########
