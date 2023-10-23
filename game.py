@@ -22,12 +22,17 @@ display.set_caption("Space 460")
 INVINCIBILITY   = True # for troubleshooting
 MAX_LIST_ITEMS  = 999
 
+
+
+MAX_OFFSCREEN_WIDTH     = (my_screen.WIDTH) / 2
+MAX_OFFSCREEN_HEIGHT    = 10
+
 def remove_offscreen_list_items(input_list):
     new_list = []
     for item in input_list:
         x, y = item.pos
-        if -(my_screen.WIDTH / 2) <= x <= my_screen.WIDTH + (my_screen.WIDTH / 2) and \
-           -(my_screen.HEIGHT / 2) <= y <= my_screen.HEIGHT + (my_screen.HEIGHT / 2):
+        if ( - MAX_OFFSCREEN_WIDTH  )   <= x <= ( MAX_OFFSCREEN_WIDTH  ) and \
+           ( - MAX_OFFSCREEN_HEIGHT )   <= y <= ( MAX_OFFSCREEN_HEIGHT ):
             new_list.append(item)
     return new_list
 
@@ -280,6 +285,7 @@ while running:
 
     #/background
     #enemies
+    """ temporary enemy removal
     if enemy_clock > enemy_spawn_rate:
         if len(enemies_list) < 1000:
             enemy_clock = 0
@@ -287,7 +293,7 @@ while running:
                 enemies_list.append(Enemy("vfighter"))
             else:
                 enemies_list.append(Enemy("standard")) 
-                
+    """
     #enemy movement
     for i in enemies_list: ##FIXME: move into class?
             i.pos[1] += i.speed
@@ -369,11 +375,11 @@ while running:
     ######### ######### #########
 
 
-    enemies_list = remove_offscreen_list_items(enemies_list)
-    stars = remove_offscreen_list_items(stars)
+    #enemies_list = remove_offscreen_list_items(enemies_list)
+    #stars = remove_offscreen_list_items(stars)
 
-    enemies_list = enforce_list_size(enemies_list)
-    stars = enforce_list_size(stars)
+    #enemies_list = enforce_list_size(enemies_list)
+    #stars = enforce_list_size(stars)
     bullets = enforce_list_size(bullets)
 
 
