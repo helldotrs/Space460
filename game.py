@@ -20,16 +20,23 @@ display.set_caption("Space 460")
 ######### ######### #########
 
 INVINCIBILITY   = True # for troubleshooting
-MAX_LIST_ITEMS  = 10
+MAX_LIST_ITEMS  = 1000
 MAX_OFFSCREEN_WIDTH     = 100 #(my_screen.WIDTH) / 2
-MAX_OFFSCREEN_HEIGHT    = 10
+MAX_OFFSCREEN_HEIGHT    = 100
 
 def remove_offscreen_list_items(input_list):
     items_to_remove = []
     for item in input_list:
         x, y = item.pos
-        if not (-MAX_OFFSCREEN_WIDTH <= x <= MAX_OFFSCREEN_WIDTH) and (-MAX_OFFSCREEN_HEIGHT <= y <= MAX_OFFSCREEN_HEIGHT):
+        if (-MAX_OFFSCREEN_WIDTH <= x <= MAX_OFFSCREEN_WIDTH) and \
+               (-MAX_OFFSCREEN_HEIGHT <= y <= MAX_OFFSCREEN_HEIGHT):
             items_to_remove.append(item)
+
+        """
+        #for troubleshooting
+        if y > my_screen.HEIGHT - 100:
+            items_to_remove.append(item)
+        """
 
     for item in items_to_remove:
         input_list.remove(item)
@@ -153,7 +160,8 @@ class BgStar(object):
     def __init__(self):
         self.size_x = random.randint(1,5)   #FIX ME: wonky property name
         self.size   = [self.size_x,self.size_x]
-        self.pos    = [random.randint((-10), (my_screen.WIDTH + 11)),-self.size[1]]
+        self.pos    = [ random.randint( 0, my_screen.WIDTH),\
+                      ( -self.size[1] * 2 )]
         self.speed  = round(random.uniform(0.5, 3), 3)
         self.damage = 1
 
@@ -278,7 +286,7 @@ while running:
 
     #/background
     #enemies
-    """ temporary enemy removal
+
     if enemy_clock > enemy_spawn_rate:
         if len(enemies_list) < 1000:
             enemy_clock = 0
@@ -286,7 +294,7 @@ while running:
                 enemies_list.append(Enemy("vfighter"))
             else:
                 enemies_list.append(Enemy("standard")) 
-    """
+
     #enemy movement
     for i in enemies_list: ##FIXME: move into class?
             i.pos[1] += i.speed
@@ -368,12 +376,12 @@ while running:
     ######### ######### #########
 
 
-    #enemies_list = remove_offscreen_list_items(enemies_list)
-    #stars = remove_offscreen_list_items(stars)
+    remove_offscreen_list_items(enemies_list)
+    remove_offscreen_list_items(stars)
     remove_offscreen_list_items(bullets)
 
-    #enemies_list = enforce_list_size(enemies_list)
-    #stars = enforce_list_size(stars)
+    enforce_list_size(enemies_list)
+    enforce_list_size(stars)
     enforce_list_size(bullets)
 
 
