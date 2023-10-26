@@ -1,3 +1,5 @@
+#copyright 2023, for now. will probably convert to open source in the future
+
 from sys import exit
 import pygame
 import random
