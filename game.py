@@ -19,8 +19,8 @@ display.set_caption("Space 460")
 ##          start          ##
 ######### ######### #########
 
-INVINCIBILITY   = True # for troubleshooting
-MAX_LIST_ITEMS  = 1000
+INVINCIBILITY           = True # for troubleshooting
+MAX_LIST_ITEMS          = 1000
 MAX_OFFSCREEN_WIDTH     = 100 #(my_screen.WIDTH) / 2
 MAX_OFFSCREEN_HEIGHT    = 100
 
