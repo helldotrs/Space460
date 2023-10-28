@@ -99,12 +99,14 @@ my_screen    = MyScreen()
 
 class Player():
     def __init__(self):
+        #pos --> start_pos
         self.pos        = [my_screen.CENTER_X,  my_screen.HEIGHT  - 50]
         self.size       = (16,  16)
+        # limit --> movement_area?
         self.limit      = [(0), (my_screen.WIDTH - self.size[0]), (0), (my_screen.HEIGHT - self.size[1])]    #FIXME should be a two layer: ((x min, x max), (y min, y max))
         self.speed      = (5,   0)         #no y movement
-        self.box        = Rect(self.pos, self.size)
-        self.auto_fire  = False
+        self.box        = Rect(self.pos, self.size) # ???
+        self.auto_fire  = True
         self.kills      = 0
         self.points     = 0
         self.lives      = 3 #for future updates
@@ -115,19 +117,9 @@ class Player():
 
         if  keys[K_LEFT]    and self.pos[0] >= self.limit[0]:
             self.pos[0] -= self.speed[0]
-            #print("left")
+            
         if  keys[K_RIGHT]   and self.pos[0] <= self.limit[1]:
             self.pos[0] += self.speed[0]
-            #print("right")
-
-        if(keys[K_UP])      and self.pos[1] >= self.limit[2]:
-            self.pos[1] -= self.speed[1]
-            print("up")
-        if(keys[K_DOWN])    and self.pos[1] <= self.limit[3]:
-            self.pos[1] += self.speed[1]
-            print("down")
-
-        #y movement removed in self.speed[1]
 
     def draw(self):
         draw.rect(my_screen.screen, color.player, Rect(self.pos, self.size))
