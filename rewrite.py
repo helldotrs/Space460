@@ -51,6 +51,16 @@ class MyScreen():
 
 my_screen    = MyScreen()
 
+class Timers():
+    """
+    only rez when Timers are at 0.
+    so if enemy timer is 19 that means an enemy will only be rezzed ever 20th time the game loop is excuted
+    the higher number on the timer the less frequent the action affected by it happens
+    """
+    pass
+
+timers = Timers()
+
 class Enemy():
     def __init__(self, enemy_type):
         self.enemy_type = enemy_type
