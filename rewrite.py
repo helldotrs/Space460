@@ -45,6 +45,19 @@ class MyScreen():
 
 my_screen    = MyScreen()
 
+class Enemy():
+    def __init__(self, enemy_type):
+        self.enemy_type = enemy_type
+
+
+def spawn_enemy(enemy_type = "standard"):
+    pass
+    #FIXME: create instance
+
+
+
+
+
 objects_with_do_method = [my_screen]
 
 #main loop
