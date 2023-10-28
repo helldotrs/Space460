@@ -1,9 +1,15 @@
 #copyright 2023, for now. will probably convert to open source in the future
 
+##### ##### ##### #####
+## IMPORT
+##### ##### ##### #####
 from sys import exit
 import pygame
 import random
 
+##### ##### ##### #####
+## CLASSES
+##### ##### ##### #####
 class Colors():
     def __init__(self):
         self.WHITE      = (255,     255,    255 )
@@ -49,18 +55,23 @@ class Enemy():
     def __init__(self, enemy_type):
         self.enemy_type = enemy_type
 
+##### ##### ##### #####
+## FUNCTIONS
+##### ##### ##### #####
 
 def spawn_enemy(enemy_type = "standard"):
     pass
     #FIXME: create instance
 
-
-
-
+##### ##### ##### #####
+## VARIABLES
+##### ##### ##### #####
 
 objects_with_do_method = [my_screen]
 
-#main loop
+##### ##### ##### #####
+## MAIN LOOP
+##### ##### ##### #####
 while(True):
     for a in objects_with_do_method:
         for b in a:
