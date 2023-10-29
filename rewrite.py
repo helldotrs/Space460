@@ -1,4 +1,4 @@
-#copyright 2023, for now. will probably convert to open source in the future
+#copyright 2023, for now. will probably convert to open                           7 4source in the future
 
 ##### ##### ##### #####
 ## IMPORT
@@ -6,6 +6,12 @@
 from sys import exit
 import pygame
 import random
+
+##### ##### ##### #####
+## various
+##### ##### ##### #####
+
+display.set_caption("hell-space-460")
 
 ##### ##### ##### #####
 ## CLASSES
@@ -76,6 +82,7 @@ def spawn_enemy(enemy_type = "standard"):
 ##### ##### ##### #####
 ## VARIABLES
 ##### ##### ##### #####
+
 
 objects_with_do_method = [my_screen]
 
