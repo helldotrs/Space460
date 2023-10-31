@@ -84,7 +84,7 @@ def spawn_enemy(enemy_type = "standard"):
 ##### ##### ##### #####
 
 
-objects_with_do_method = [my_screen]
+objects_with_do_method = [my_screen] #my_screen has to go first as  not to draw background over anything else.
 
 ##### ##### ##### #####
 ## MAIN LOOP
