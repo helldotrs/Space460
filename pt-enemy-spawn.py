@@ -1,7 +1,7 @@
 import time
 
 enemies = []
-n = 0
+n = 1
 
 def draw_enemies(enemies):
   for enemy in enemies:
@@ -16,20 +16,21 @@ def limit_list_size(input_list, size=10)
   if len(input_list) >= 10: 
     input_list.pop(0)
     """
+"""FIXME
 def add_enemy():
   enemies.append(n)
 
   n += 1
+ """ 
   
-  
-white True:
+while True:
   draw_enemies(enemies)
   pause_game()
-  limit_size(enemies)
 
   #limit_list_size(enemies)
   if len(enemies) >= 10: 
     enemies.pop(0)
 
-  add_enemy()
+  enemies.append(n)
 
+  n += 1
