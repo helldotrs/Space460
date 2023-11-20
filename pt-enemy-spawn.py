@@ -22,7 +22,7 @@ def add_enemy():
 
   n += 1
  """ 
-  
+  """
 while True:
   draw_enemies(enemies)
   pause_game()
@@ -34,3 +34,4 @@ while True:
   enemies.append(n)
 
   n += 1
+  """
