@@ -5,8 +5,8 @@ import time
 
 ## variables
 game_running = True
-pause_time = 1
+pause_length = 1
 
 ## mainloop
 while game_running:
-  time.pause(pause_time) 
+  time.pause(pause_length) 
