@@ -1,5 +1,5 @@
 enemies_list = []
-enemies_list_size = 10
+ENEMIES_LIST_SIZE = 10
 
 def draw_enemies(enemies):
     """Print the list of enemies."""
@@ -20,7 +20,7 @@ def add_standard_enemy():
 def limit_list_size():
     """Limit the size of the enemies list."""
     global enemies_list
-    enemies_list = trim_list_size(enemies_list, enemies_list_size)
+    enemies_list = trim_list_size(enemies_list, ENEMIES_LIST_SIZE)
 
 def trim_list_size(input_list, size):
     """Trim the list size to the specified size."""
