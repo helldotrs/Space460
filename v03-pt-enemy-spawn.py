@@ -15,7 +15,7 @@ def add_enemy(enemy_type="std"):
     limit_list_size()
 
 def add_standard_enemy():
-    enemies_list.append("standard enemy")
+    add_enemy(std)
 
 def trim_enemies_list_size():
     global enemies_list
