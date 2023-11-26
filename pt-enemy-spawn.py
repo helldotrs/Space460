@@ -1,59 +1,35 @@
 enemies_list = []
 enemies_list_size = 10
 
-def enemies_draw(enemies):
+def draw_enemies(enemies):
+    """Print the list of enemies."""
     for enemy in enemies:
         print(enemy)
     print("/end")
 
-def enemies_add(type="std"):
-    if type == "std":
-        enemies_add_standard()
-    enemies_limit_size()
+def add_enemy(enemy_type="std"):
+    """Add an enemy to the list based on the given type."""
+    if enemy_type == "std":
+        add_standard_enemy()
+    limit_list_size()
 
-def enemies_add_standard():
+def add_standard_enemy():
+    """Add a standard enemy to the list."""
     enemies_list.append("standard enemy")
 
-def enemies_limit_size():
+def limit_list_size():
+    """Limit the size of the enemies list."""
     global enemies_list
-    enemies_list = limit_list_size(enemies_list, enemies_list_size)
+    enemies_list = trim_list_size(enemies_list, enemies_list_size)
 
-def limit_list_size(input_list, input_size):
-    while len(input_list) > input_size:
+def trim_list_size(input_list, size):
+    """Trim the list size to the specified size."""
+    while len(input_list) > size:
         input_list.pop(0)
     return input_list
 
 # Example usage
-enemies_add_standard()
-enemies_add_standard()
-enemies_add_standard()
-enemies_draw(enemies_list)
-
-
-
-
-
-"""FIXME
-def limit_list_size(input_list, size=10)
-  if len(input_list) >= 10: 
-    input_list.pop(0)
-    """
-"""FIXME
-def add_enemy():
-  enemies.append(n)
-
-  n += 1
- """ 
-  """
-while True:
-  draw_enemies(enemies)
-  pause_game()
-
-  #limit_list_size(enemies)
-  if len(enemies) >= 10: 
-    enemies.pop(0)
-
-  enemies.append(n)
-
-  n += 1
-  """
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+draw_enemies(enemies_list)
