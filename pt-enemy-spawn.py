@@ -1,25 +1,26 @@
-enemies_list       = []
-enemies_list_size  = 10
+enemies_list = []
+enemies_list_size = 10
 
 def enemies_draw(enemies):
-  for enemy in enemies:
-    print(enemy)
-  print("/end")
+    for enemy in enemies:
+        print(enemy)
+    print("/end")
 
 def enemies_add(type="std"):
-  if type == "std":
-    enemies_add_standard()
-  enemies_limit_size()
+    if type == "std":
+        enemies_add_standard()
+    enemies_limit_size()
 
 def enemies_add_standard():
-  enemies_list.append("standard enemy")
+    enemies_list.append("standard enemy")
 
 def enemies_limit_size():
-  limit_list_size(enemies_list, enemies_list_size)
-  
+    limit_list_size(enemies_list, enemies_list_size)
+
 def limit_list_size(input_list, input_size):
-  white(len(input_list) > input_size):
-    input_list.pop(0) #is this global?
+    while len(input_list) > input_size:
+        input_list.pop(0)
+
 
 
 
