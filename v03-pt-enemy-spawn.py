@@ -30,4 +30,4 @@ def trim_list_size(input_list, size):
 add_standard_enemy()
 add_standard_enemy()
 add_standard_enemy()
-print_enemies_l
+print_enemies_list()
