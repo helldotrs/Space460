@@ -12,7 +12,7 @@ def print_list_instances(input_list):
 def add_enemy(enemy_type="std"):
     if enemy_type == "std":
         enemies_list.append("standard enemy")
-    trim_list_size()
+    trim_enemies_list_size()
 
 def add_standard_enemy():
     add_enemy("std")
