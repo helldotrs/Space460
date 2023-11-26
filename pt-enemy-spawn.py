@@ -1,15 +1,27 @@
-import time
+enemies_list       = []
+enemies_list_size  = 10
 
-enemies = []
-n = 1
-
-def draw_enemies(enemies):
+def enemies_draw(enemies):
   for enemy in enemies:
     print(enemy)
   print("/end")
 
-def pause_game(t=1):
-  time.sleep(t)
+def enemies_add(type="std"):
+  if type == "std":
+    enemies_add_standard()
+  enemies_limit_size()
+
+def enemies_add_standard():
+  enemies_list.append("standard enemy")
+
+def enemies_limit_size():
+  limit_list_size(enemies_list, enemies_list_size)
+  
+def limit_list_size(input_list, input_size):
+  white(len(input_list) > input_size):
+    input_list.pop(0) #is this global?
+
+
 
 """FIXME
 def limit_list_size(input_list, size=10)
