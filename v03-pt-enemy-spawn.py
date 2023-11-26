@@ -1,5 +1,5 @@
 enemies_list = []
-ENEMIES_LIST_SIZE = 10
+ENEMIES_LIST_SIZE = 10 #does not currently work
 
 def print_enemies_list():
     print_list_instances(enemies_list)
