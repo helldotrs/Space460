@@ -27,7 +27,23 @@ def trim_list_size(input_list, size):
     return input_list
 
 # Example usage
+
 add_standard_enemy()
 add_standard_enemy()
 add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+add_standard_enemy()
+
 print_enemies_list()
