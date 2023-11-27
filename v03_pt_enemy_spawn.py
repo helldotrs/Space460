@@ -25,7 +25,7 @@ def trim_list_size(input_list, size):
     while len(input_list) > size:
         input_list.pop(0)
     return input_list
-
+"""
 # Example usage
 
 add_standard_enemy()
@@ -47,3 +47,4 @@ add_standard_enemy()
 add_standard_enemy()
 
 print_enemies_list()
+"""
