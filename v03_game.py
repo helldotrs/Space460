@@ -30,6 +30,7 @@ while True:
             sys.exit()
 
     # Update game logic here
+    add_standard_enemy()
 
     # Draw graphics here
 
